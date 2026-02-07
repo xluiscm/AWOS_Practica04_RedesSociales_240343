@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+    --color-facebook: #1877F2;
+    --color-linkedin: #0A66C2;
+    --color-twitter: #1DA1F2;
+    --color-github: #333333;
+    --color-discord: #5865F2;
+}
