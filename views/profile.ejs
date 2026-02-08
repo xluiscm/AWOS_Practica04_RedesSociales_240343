@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link href="/css/output.css" rel="stylesheet">
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+            <a href="/logout"
+                class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl font-semibold transition duration-300">
+                Cerrar Sesión
+            </a>
+        </div>
+
+        <!-- Perfil del Usuario -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <!-- Avatar -->
+                <div class="relative">
+                    <% if (user.photos && user.photos[0]) { %>
+                        <img src="<%= user.photos[0].value %>" alt="Avatar"
+                            class="w-48 h-48 rounded-full border-4 border-blue-100 shadow-lg">
+                        <% } else { %>
+                            <div
+                                class="w-48 h-48 rounded-full bg-gray-200 flex items-center justify-center border-4 border-blue-100">
+                                <span class="text-6xl text-gray-500">
+                                    <%= user.displayName ? user.displayName.charAt(0) : 'U' %>
+                                </span>
+                            </div>
+                            <% } %>
+                                <div
+                                    class="absolute bottom-4 right-4 bg-green-500 w-6 h-6 rounded-full border-2 border-white">
+                                </div>
+                </div>
+
+                <!-- Información -->
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-2">
+                        <%= user.displayName || user.username || 'Usuario' %>
+                    </h2>
+                    <p class="text-gray-600 text-lg mb-4">
+                        Autenticado con
+                        <span class="font-semibold 
+                            <%= user.provider === 'facebook' ? 'text-facebook' : '' %>
+                            <%= user.provider === 'linkedin' ? 'text-linkedin' : '' %>
+                            <%= user.provider === 'twitter' ? 'text-twitter' : '' %>
+                            <%= user.provider === 'github' ? 'text-github' : '' %>
+                            <%= user.provider === 'discord' ? 'text-discord' : '' %>">
+                            <%= user.provider ? user.provider.charAt(0).toUpperCase() + user.provider.slice(1)
+                                : 'Red Social' %>
+                        </span>
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-blue-50 p-4 rounded-xl">
+                            <p class="text-sm text-gray-600">ID de Usuario</p>
+                            <p class="font-mono text-gray-800 truncate">
+                                <%= user.id %>
+                            </p>
+                        </div>
+                        <% if (user.emails && user.emails[0]) { %>
+                            <div class="bg-green-50 p-4 rounded-xl">
+                                <p class="text-sm text-gray-600">Email</p>
+                                <p class="text-gray-800 truncate">
+                                    <%= user.emails[0].value %>
+                                </p>
+                            </div>
+                            <% } %>
+                                <div class="bg-purple-50 p-4 rounded-xl">
+                                    <p class="text-sm text-gray-600">Proveedor</p>
+                                    <p class="text-gray-800">
+                                        <%= user.provider %>
+                                    </p>
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Contenido de la Red Social -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Contenido de <%= user.provider %>
+            </h3>
+
+            <div id="api-content" class="space-y-6">
+                <!-- Contenido dinámico cargado según la red social -->
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <!-- Icono según proveedor -->
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Información de la API</p>
+                            <p class="text-sm text-gray-600">Datos obtenidos de <%= user.provider %>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">
+                        Esta sección mostraría contenido específico de la red social autenticada,
+                        como publicaciones recientes, seguidores, repositorios (GitHub),
+                        servidores (Discord), etc.
+                    </p>
+                    <div class="mt-4 text-sm text-gray-500">
+                        <p>Token de acceso disponible para realizar más peticiones a la API.</p>
+                    </div>
+                </div>
+
+                <!-- Ejemplo de datos específicos por plataforma -->
+                <% if (user.provider==='github' ) { %>
+                    <div class="bg-gray-800 text-white p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-3">Ejemplo para GitHub:</h4>
+                        <p>Podrías consumir la API de GitHub para mostrar:</p>
+                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                            <li>Repositorios públicos del usuario</li>
+                            <li>Eventos recientes (commits, issues)</li>
+                            <li>Seguidores y seguidos</li>
+                            <li>Organizaciones</li>
+                        </ul>
+                        <button class="mt-4 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg transition duration-300">
+                            Cargar Repositorios
+                        </button>
+                    </div>
+                    <% } %>
+
+                        <% if (user.provider==='facebook' ) { %>
+                            <div class="bg-facebook text-white p-6 rounded-xl">
+                                <h4 class="font-bold text-lg mb-3">Ejemplo para Facebook:</h4>
+                                <p>Con los permisos adecuados podrías mostrar:</p>
+                                <ul class="list-disc pl-5 mt-2 space-y-1">
+                                    <li>Publicaciones recientes</li>
+                                    <li>Amigos (con permisos)</li>
+                                    <li>Páginas que sigue</li>
+                                    <li>Eventos próximos</li>
+                                </ul>
+                            </div>
+                            <% } %>
+            </div>
+
+            <!-- Botón para consumir más datos -->
+            <div class="mt-8 text-center">
+                <button onclick="loadMoreContent()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition duration-300 shadow-md hover:shadow-lg">
+                    Cargar Más Datos de la API
+                </button>
+            </div>
+        </div>
+
+        <!-- Información técnica -->
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <p>Token de acceso disponible en el servidor. Revisa la documentación de cada API para más endpoints.</p>
+            <p class="mt-1">Proyecto educativo - Práctica de consumo de APIs con OAuth</p>
+        </div>
+    </div>
+
+    <script>
+        function loadMoreContent() {
+            const apiContent = document.getElementById('api-content');
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'bg-yellow-50 p-4 rounded-xl border border-yellow-200';
+            loadingMsg.innerHTML = `
+            <div class="flex items-center gap-3">
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                <p class="text-gray-700">Consultando API de <%= user.provider %>...</p>
+            </div>
+        `;
+            apiContent.appendChild(loadingMsg);
+
+            // Simulación de consumo de API
+            setTimeout(() => {
+                loadingMsg.remove();
+                const newContent = document.createElement('div');
+                newContent.className = 'bg-green-50 p-6 rounded-xl border border-green-200';
+                newContent.innerHTML = `
+                <h4 class="font-bold text-gray-800 mb-2">Datos adicionales cargados</h4>
+                <p class="text-gray-700">Estos son datos simulados que normalmente se obtendrían de la API real de <%= user.provider %>.</p>
+                <p class="text-sm text-gray-500 mt-2">Timestamp: ${new Date().toLocaleTimeString()}</p>
+            `;
+                apiContent.appendChild(newContent);
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>
