@@ -60,7 +60,7 @@
 
 **![general_view](./src/imagenes/githublogueo.png)**
 
-6. Validacion de 
+6. Validacion de Discord
 
 **![general_view](./src/imagenes/discord.png)**
 
