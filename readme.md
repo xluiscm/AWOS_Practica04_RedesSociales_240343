@@ -25,34 +25,45 @@
 ### Resultados obtenidos:
 
 1. Visualización de la Página
+
 **![general_view](./src/imagenes/inicio.png)**
 
 2. Validacion de Facebook
+
 **![general_view](./src/imagenes/facebook.png)**
 
 2.1 Logueo de facebook
+
 **![general_view](./src/imagenes/facebooklogueo.png)**
 
 3. Validacion de Linkedin
+
 **![general_view](./src/imagenes/linkedin.png)**
 
 3.1 Faltante de Validacion de Linkedin
+
 **![general_view](./src/imagenes/linkedinvalidacion.png)**
 
 4. Validacion de Twitter/X
+
 **![general_view](./src/imagenes/twitter.png)**
 
 4.1 Logueo de Twitter/X
+
 **![general_view](./src/imagenes/twitterlogueo.png)**
 
 5. Validacion de GitHub
+
 **![general_view](./src/imagenes/github.png)**
 
 5.1 Logueo de GitHub
+
 **![general_view](./src/imagenes/githublogueo.png)**
 
-6. Validacion de Discord
+6. Validacion de 
+
 **![general_view](./src/imagenes/discord.png)**
 
 6.1 Logueo de Discord
+
 **![general_view](./src/imagenes/discordlogueo.png)**
