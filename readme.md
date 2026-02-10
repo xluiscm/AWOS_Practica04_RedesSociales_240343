@@ -38,11 +38,7 @@
 
 3. Validacion de Linkedin
 
-**![general_view](./src/imagenes/linkedin.png)**
-
-3.1 Faltante de Validacion de Linkedin
-
-**![general_view](./src/imagenes/linkedinvalidacion.png)**
+**![general_view](./src/imagenes/twitchlogueo.png)**
 
 4. Validacion de Twitter/X
 

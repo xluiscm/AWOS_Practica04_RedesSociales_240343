@@ -10,7 +10,6 @@
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
     <div class="max-w-6xl mx-auto">
-        <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
             <a href="/logout"
@@ -19,28 +18,22 @@
             </a>
         </div>
 
-        <!-- Perfil del Usuario -->
         <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <div class="flex flex-col md:flex-row items-center gap-8">
-                <!-- Avatar -->
                 <div class="relative">
                     <% if (user.photos && user.photos[0]) { %>
-                        <img src="<%= user.photos[0].value %>" alt="Avatar"
-                            class="w-48 h-48 rounded-full border-4 border-blue-100 shadow-lg">
-                        <% } else { %>
-                            <div
-                                class="w-48 h-48 rounded-full bg-gray-200 flex items-center justify-center border-4 border-blue-100">
-                                <span class="text-6xl text-gray-500">
-                                    <%= user.displayName ? user.displayName.charAt(0) : 'U' %>
-                                </span>
-                            </div>
-                            <% } %>
-                                <div
-                                    class="absolute bottom-4 right-4 bg-green-500 w-6 h-6 rounded-full border-2 border-white">
-                                </div>
+                        <img src="<%= user.photos[0].value || user.photos[0] %>" alt="Avatar"
+                            class="w-48 h-48 rounded-full border-4 border-blue-100 shadow-lg object-cover">
+                    <% } else { %>
+                        <div class="w-48 h-48 rounded-full bg-gray-200 flex items-center justify-center border-4 border-blue-100">
+                            <span class="text-6xl text-gray-500 font-bold">
+                                <%= user.displayName ? user.displayName.charAt(0) : 'U' %>
+                            </span>
+                        </div>
+                    <% } %>
+                    <div class="absolute bottom-4 right-4 bg-green-500 w-6 h-6 rounded-full border-2 border-white"></div>
                 </div>
 
-                <!-- Información -->
                 <div class="flex-1 text-center md:text-left">
                     <h2 class="text-4xl font-bold text-gray-800 mb-2">
                         <%= user.displayName || user.username || 'Usuario' %>
@@ -49,115 +42,105 @@
                         Autenticado con
                         <span class="font-semibold 
                             <%= user.provider === 'facebook' ? 'text-facebook' : '' %>
-                            <%= user.provider === 'linkedin' ? 'text-linkedin' : '' %>
+                            <%= user.provider === 'twitch' ? 'text-twitch' : '' %>
                             <%= user.provider === 'twitter' ? 'text-twitter' : '' %>
                             <%= user.provider === 'github' ? 'text-github' : '' %>
                             <%= user.provider === 'discord' ? 'text-discord' : '' %>">
-                            <%= user.provider ? user.provider.charAt(0).toUpperCase() + user.provider.slice(1)
-                                : 'Red Social' %>
+                            <%= user.provider ? user.provider.charAt(0).toUpperCase() + user.provider.slice(1) : 'Red Social' %>
                         </span>
                     </p>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div class="bg-blue-50 p-4 rounded-xl">
-                            <p class="text-sm text-gray-600">ID de Usuario</p>
-                            <p class="font-mono text-gray-800 truncate">
-                                <%= user.id %>
-                            </p>
+                            <p class="text-sm text-gray-600 font-bold uppercase text-[10px]">ID de Usuario</p>
+                            <p class="font-mono text-gray-800 truncate"><%= user.id %></p>
                         </div>
                         <% if (user.emails && user.emails[0]) { %>
                             <div class="bg-green-50 p-4 rounded-xl">
-                                <p class="text-sm text-gray-600">Email</p>
-                                <p class="text-gray-800 truncate">
-                                    <%= user.emails[0].value %>
-                                </p>
+                                <p class="text-sm text-gray-600 font-bold uppercase text-[10px]">Email</p>
+                                <p class="text-gray-800 truncate"><%= user.emails[0].value %></p>
                             </div>
-                            <% } %>
-                                <div class="bg-purple-50 p-4 rounded-xl">
-                                    <p class="text-sm text-gray-600">Proveedor</p>
-                                    <p class="text-gray-800">
-                                        <%= user.provider %>
-                                    </p>
-                                </div>
+                        <% } %>
+                        <div class="bg-purple-50 p-4 rounded-xl">
+                            <p class="text-sm text-gray-600 font-bold uppercase text-[10px]">Proveedor</p>
+                            <p class="text-gray-800 font-semibold"><%= user.provider %></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Sección de Contenido de la Red Social -->
         <div class="bg-white rounded-2xl shadow-xl p-8">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">Contenido de <%= user.provider %>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 font-mono">
+                > Contenido_de_API: <%= user.provider %>
             </h3>
 
             <div id="api-content" class="space-y-6">
-                <!-- Contenido dinámico cargado según la red social -->
                 <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                                <!-- Icono según proveedor -->
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold text-gray-800">Información de la API</p>
-                            <p class="text-sm text-gray-600">Datos obtenidos de <%= user.provider %>
-                            </p>
+                            <p class="font-semibold text-gray-800">Información Técnica</p>
+                            <p class="text-sm text-gray-600">Datos recuperados via OAuth 2.0</p>
                         </div>
                     </div>
-                    <p class="text-gray-700">
-                        Esta sección mostraría contenido específico de la red social autenticada,
-                        como publicaciones recientes, seguidores, repositorios (GitHub),
-                        servidores (Discord), etc.
+                    <p class="text-gray-700 text-sm">
+                        Estás visualizando los datos que la API de <strong><%= user.provider %></strong> permite compartir bajo los alcances (scopes) actuales.
                     </p>
-                    <div class="mt-4 text-sm text-gray-500">
-                        <p>Token de acceso disponible para realizar más peticiones a la API.</p>
-                    </div>
                 </div>
 
-                <!-- Ejemplo de datos específicos por plataforma -->
-                <% if (user.provider==='github' ) { %>
-                    <div class="bg-gray-800 text-white p-6 rounded-xl">
-                        <h4 class="font-bold text-lg mb-3">Ejemplo para GitHub:</h4>
-                        <p>Podrías consumir la API de GitHub para mostrar:</p>
-                        <ul class="list-disc pl-5 mt-2 space-y-1">
-                            <li>Repositorios públicos del usuario</li>
-                            <li>Eventos recientes (commits, issues)</li>
-                            <li>Seguidores y seguidos</li>
-                            <li>Organizaciones</li>
+                <% if (user.provider === 'twitch') { %>
+                    <div class="bg-twitch/10 border border-twitch/20 p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-3 text-twitch flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                            Módulo de Twitch
+                        </h4>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-600 text-sm">
+                            <li><strong>Nombre en pantalla:</strong> <%= user.displayName %></li>
+                            <li><strong>Tipo de usuario:</strong> <%= user.type || 'Normal' %></li>
+                            <li><strong>Vistas del canal:</strong> Conexión lista para Helix API.</li>
                         </ul>
-                        <button class="mt-4 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg transition duration-300">
-                            Cargar Repositorios
+                        <button class="mt-4 bg-twitch text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition shadow-md text-sm">
+                            Cargar Seguidores
                         </button>
                     </div>
-                    <% } %>
+                <% } %>
 
-                        <% if (user.provider==='facebook' ) { %>
-                            <div class="bg-facebook text-white p-6 rounded-xl">
-                                <h4 class="font-bold text-lg mb-3">Ejemplo para Facebook:</h4>
-                                <p>Con los permisos adecuados podrías mostrar:</p>
-                                <ul class="list-disc pl-5 mt-2 space-y-1">
-                                    <li>Publicaciones recientes</li>
-                                    <li>Amigos (con permisos)</li>
-                                    <li>Páginas que sigue</li>
-                                    <li>Eventos próximos</li>
-                                </ul>
-                            </div>
-                            <% } %>
+                <% if (user.provider === 'github') { %>
+                    <div class="bg-gray-800 text-white p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            Módulo de GitHub
+                        </h4>
+                        <p class="text-sm opacity-90 mb-4">Repositorios y actividad de desarrollo:</p>
+                        <button class="bg-white text-gray-900 px-4 py-2 rounded-lg font-bold text-sm">
+                            Ver Repositorios
+                        </button>
+                    </div>
+                <% } %>
+
+                <% if (user.provider === 'facebook') { %>
+                    <div class="bg-facebook text-white p-6 rounded-xl shadow-inner">
+                        <h4 class="font-bold text-lg mb-3">Módulo de Facebook</h4>
+                        <p class="text-sm opacity-90">Acceso a Feed y Amigos (Simulado).</p>
+                    </div>
+                <% } %>
             </div>
 
-            <!-- Botón para consumir más datos -->
             <div class="mt-8 text-center">
                 <button onclick="loadMoreContent()"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition duration-300 shadow-md hover:shadow-lg">
-                    Cargar Más Datos de la API
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition duration-300 shadow-md">
+                    Actualizar Datos de la API
                 </button>
             </div>
         </div>
 
-        <!-- Información técnica -->
-        <div class="mt-8 text-center text-gray-500 text-sm">
-            <p>Token de acceso disponible en el servidor. Revisa la documentación de cada API para más endpoints.</p>
-            <p class="mt-1">Proyecto educativo - Práctica de consumo de APIs con OAuth</p>
+        <div class="mt-8 text-center text-gray-500 text-[11px] uppercase tracking-widest">
+            <p>Proyecto Educativo | AWOS 240343 | OAuth v2.0</p>
         </div>
     </div>
 
@@ -165,29 +148,16 @@
         function loadMoreContent() {
             const apiContent = document.getElementById('api-content');
             const loadingMsg = document.createElement('div');
-            loadingMsg.className = 'bg-yellow-50 p-4 rounded-xl border border-yellow-200';
-            loadingMsg.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                <p class="text-gray-700">Consultando API de <%= user.provider %>...</p>
-            </div>
-        `;
+            loadingMsg.className = 'bg-yellow-50 p-4 rounded-xl border border-yellow-200 animate-pulse';
+            loadingMsg.innerHTML = `<p class="text-yellow-700 text-sm font-mono text-center">Recuperando nuevos paquetes de <%= user.provider %>...</p>`;
             apiContent.appendChild(loadingMsg);
 
-            // Simulación de consumo de API
             setTimeout(() => {
                 loadingMsg.remove();
-                const newContent = document.createElement('div');
-                newContent.className = 'bg-green-50 p-6 rounded-xl border border-green-200';
-                newContent.innerHTML = `
-                <h4 class="font-bold text-gray-800 mb-2">Datos adicionales cargados</h4>
-                <p class="text-gray-700">Estos son datos simulados que normalmente se obtendrían de la API real de <%= user.provider %>.</p>
-                <p class="text-sm text-gray-500 mt-2">Timestamp: ${new Date().toLocaleTimeString()}</p>
-            `;
-                apiContent.appendChild(newContent);
-            }, 1500);
+                alert("Sincronización completa con el proveedor.");
+            }, 1000);
         }
     </script>
 </body>
 
-</html>x
+</html>

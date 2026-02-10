@@ -4,36 +4,31 @@ const passport = require('passport');
 // --- 1. ESTRATEGIAS ---
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
-const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+const TwitchStrategy = require('passport-twitch-new').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const DiscordStrategy = require('passport-discord').Strategy;
 
 // --- 2. CONFIGURACIÓN ---
 
-// LinkedIn - Configuración OpenID Connect con manejo de errores
-passport.use(new LinkedInStrategy({
-    clientID: process.env.LINKEDIN_CLIENT_ID,
-    clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
-    callbackURL: process.env.LINKEDIN_CALLBACK_URL,
-    scope: ['openid', 'profile', 'email'],
-    state: true,
-    userProfileURL: "https://api.linkedin.com/v2/userinfo" 
+// Twitch Strategy con Mapeo de Perfil
+passport.use(new TwitchStrategy({
+    clientID: process.env.TWITCH_CLIENT_ID,
+    clientSecret: process.env.TWITCH_CLIENT_SECRET,
+    callbackURL: process.env.TWITCH_CALLBACK_URL,
+    scope: "user:read:email"
 }, (accessToken, refreshToken, profile, done) => {
-    try {
-        const userProfile = {
-            id: profile.id || (profile._json && profile._json.sub),
-            displayName: profile.displayName || (profile._json && profile._json.name),
-            emails: profile.emails || (profile._json ? [{ value: profile._json.email }] : []),
-            photos: profile.photos || (profile._json ? [{ value: profile._json.picture }] : []),
-            provider: 'linkedin'
-        };
-        return done(null, userProfile);
-    } catch (e) {
-        return done(e);
+    // Mapeo manual para asegurar que el nombre y la foto aparezcan
+    profile.displayName = profile.display_name; // Twitch usa display_name
+
+    // Si Twitch envía imagen, la guardamos en el formato que espera el EJS
+    if (profile.profile_image_url) {
+        profile.photos = [{ value: profile.profile_image_url }];
     }
+
+    return done(null, profile);
 }));
 
-// Otras Estrategias
+// Estrategias Adicionales
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -65,41 +60,33 @@ passport.deserializeUser((obj, done) => done(null, obj));
 
 // --- 3. RUTAS ---
 
-// LinkedIn Callback Protegido
-router.get('/auth/linkedin', passport.authenticate('linkedin'));
-router.get('/auth/linkedin/callback', (req, res, next) => {
-    passport.authenticate('linkedin', (err, user) => {
-        if (err) {
-            console.log("💡 Info: Intento de LinkedIn fallido o caducado.");
-            return res.redirect('/');
-        }
-        if (!user) return res.redirect('/');
-        req.login(user, () => res.redirect('/profile'));
-    })(req, res, next);
-});
+// Twitch Routes
+router.get('/auth/twitch', passport.authenticate('twitch'));
+router.get('/auth/twitch/callback',
+    passport.authenticate('twitch', { successRedirect: '/profile', failureRedirect: '/' })
+);
 
-// Rutas Estándar
+// Otras rutas
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 router.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/profile', failureRedirect: '/' }));
-
 router.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
 router.get('/auth/github/callback', passport.authenticate('github', { successRedirect: '/profile', failureRedirect: '/' }));
-
 router.get('/auth/twitter', passport.authenticate('twitter'));
 router.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/profile', failureRedirect: '/' }));
-
 router.get('/auth/discord', passport.authenticate('discord'));
 router.get('/auth/discord/callback', passport.authenticate('discord', { successRedirect: '/profile', failureRedirect: '/' }));
 
-// Logout Limpio
 router.get('/logout', (req, res, next) => {
     req.logout((err) => {
         if (err) return next(err);
-        req.session.destroy(() => {
+        // Destruimos la sesión en el servidor
+        req.session.destroy((err) => {
+            if (err) console.log("Error al destruir sesión:", err);
+            // Borramos la cookie del navegador
             res.clearCookie('connect.sid');
+            // Redirigimos al inicio
             res.redirect('/');
         });
     });
 });
-
 module.exports = router;
